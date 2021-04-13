@@ -80,7 +80,6 @@ WSGI_APPLICATION = 'sudoku_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': BASE_DIR / 'db.sqlite3',
         'NAME': f'{BASE_DIR}/db.sqlite3',
     }
 }
@@ -134,6 +133,10 @@ LOGOUT_REDIRECT_URL='/accounts/login'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+# use postgres on heroku
+import dj_database_url
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 
