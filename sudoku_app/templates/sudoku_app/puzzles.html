@@ -1,0 +1,24 @@
+{% if puzzles %}
+  <ul>
+    {% for puzzle in puzzles %}
+      <li><a href="/puzzles/{{puzzle.id}}/">Puzzle {{forloop.counter}}</a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No puzzles are available.</p>
+{% endif %}
+<form method="GET" action="/puzzles/create"> 
+  {% csrf_token %}
+  <input type="submit" value="Create Easy" formaction="{% url 'create_puzzle' 'easy' %}">
+  <input type="submit" value="Create Medium" formaction="{% url 'create_puzzle' 'medium' %}">
+  <input type="submit" value="Create Hard" formaction="{% url 'create_puzzle' 'hard' %}">
+</form>
+<form method="GET" action="/">
+  {% csrf_token %}
+  <input type="submit" value="Statistics" formaction="{% url 'display_stats' %}">
+  <input type="submit" value="Leaderboard" formaction="{% url 'display_leaderboard' %}">
+</form>
+<form method="GET" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <input type="submit" value="Logout">
+</form>

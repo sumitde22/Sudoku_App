@@ -1,0 +1,13 @@
+<form action="{% url 'create_user' %}" method="post">
+    {% csrf_token %}
+    <label for="email">Email</label><br>
+    <input type="text" name="email" required><br>
+    <label for="username">Username</label><br>
+    <input type="text" name="username" required><br>
+    <label for="password">Password</label><br>
+    <input type="password" name="password" required><br><br>
+    <input type="submit" value="Submit">
+</form>
+<form method="GET" action="{% url 'login' %}">
+    <input type="submit" value="Go to Login page">
+</form>

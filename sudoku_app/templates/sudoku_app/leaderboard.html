@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Puzzles Solved</th>
+    </tr>
+    {% for username, score in scores.items %}
+      <tr>
+          <td>{{username}}</td>
+          <td>{{score}}</td>
+      </tr>
+    {% endfor %}
+</table>
+<form method="GET" action="{% url 'puzzles' %}">
+    {% csrf_token %}
+    <input type="submit" value="Home">
+</form>

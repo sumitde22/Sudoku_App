@@ -1,0 +1,26 @@
+<table>
+    <tr>
+        <th>Difficulty</th>
+        <th>Solved</th>
+    </tr>
+    <tr>
+        <td>Easy</td>
+        <td>{{easy}}</td>
+    </tr>
+    <tr>
+        <td>Medium</td>
+        <td>{{medium}}</td>
+    </tr>
+    <tr>
+        <td>Hard</td>
+        <td>{{hard}}</td>
+    </tr>
+    <tr>
+        <td>Total</td>
+        <td>{{easy|add:medium|add:hard}}</td>
+    </tr>
+</table>
+<form method="GET" action="{% url 'puzzles' %}">
+    {% csrf_token %}
+    <input type="submit" value="Home">
+</form>

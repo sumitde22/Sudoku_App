@@ -1,0 +1,40 @@
+{% load static %}
+{% load custom_tags %}
+<link rel="stylesheet" href="{% static 'sudoku_app/puzzle.css' %}">
+<form action="{% url 'save_puzzle' puzzle_id %}" method="POST">
+  {% csrf_token %}
+  {% if solved %}
+    <h3>Puzzle solved successfully!</h3>
+  {% endif %}
+  Difficulty: {{difficulty}} <br><br>
+  <table>
+    {% for row in puzzle %}
+      <tr>
+          {% for col in row %}
+            {% if solved or locked_positions|index:forloop.parentloop.counter0|index:forloop.counter0 %}
+              <td><input class="row{{forloop.parentloop.counter0}} col{{forloop.counter0}}" name="({{forloop.parentloop.counter0}},{{forloop.counter0}})" type="text" maxlength=1 value='{{col}}' size=1 disabled></td>
+            {% elif errors and errors|index:forloop.parentloop.counter0|index:forloop.counter0 and col != 0 %}
+              <td><input class="row{{forloop.parentloop.counter0}} col{{forloop.counter0}} incorrect" name="({{forloop.parentloop.counter0}},{{forloop.counter0}})" type="text" maxlength=1 value='{{col|sudokuval}}' size=1></td>
+            {% else %} 
+              <td><input class="row{{forloop.parentloop.counter0}} col{{forloop.counter0}}" name="({{forloop.parentloop.counter0}},{{forloop.counter0}})" type="text" maxlength=1 value='{{col|sudokuval}}' size=1></td>
+            {% endif %}
+          {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+  <br>
+  <div>
+    <input type="submit" value="Save">
+    <input type="submit" value="Check" formaction="{% url 'check_puzzle' puzzle_id %}">
+    <input type="submit" value="Hint" formaction="{% url 'add_hint' puzzle_id %}">
+  </div>
+  <br>
+  <div>
+    <input type="submit" value="Delete" formaction="{% url 'delete_puzzle' puzzle_id %}">
+    <input type="submit" value="Reset" formaction="{% url 'reset_puzzle' puzzle_id %}">
+  </div>
+  <br>
+  <div>
+    <input type="submit" value="Home" formaction="{% url 'puzzles' %}" formmethod="GET">
+  </div>
+</form>
