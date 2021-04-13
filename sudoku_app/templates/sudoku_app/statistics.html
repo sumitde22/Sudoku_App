@@ -5,19 +5,27 @@
     </tr>
     <tr>
         <td>Easy</td>
-        <td>{{easy}}</td>
+        {% if easy %}
+            <td>{{easy}}</td>
+        {% else %} 
+            <td>0</td>
+        {% endif %}
     </tr>
     <tr>
         <td>Medium</td>
-        <td>{{medium}}</td>
+        {% if medium %}
+            <td>{{medium}}</td>
+        {% else %} 
+            <td>0</td>
+        {% endif %}
     </tr>
     <tr>
         <td>Hard</td>
-        <td>{{hard}}</td>
-    </tr>
-    <tr>
-        <td>Total</td>
-        <td>{{easy|add:medium|add:hard}}</td>
+        {% if hard %}
+            <td>{{hard}}</td>
+        {% else %} 
+            <td>0</td>
+        {% endif %}
     </tr>
 </table>
 <form method="GET" action="{% url 'puzzles' %}">
