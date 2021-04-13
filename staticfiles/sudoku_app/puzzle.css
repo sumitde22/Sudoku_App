@@ -1,0 +1,28 @@
+input {
+  text-align: center;
+  border: 0px;
+}
+
+table {
+  border: 1px solid black;
+}
+
+.col2 {
+  border-right: 1px solid black;
+}
+
+.col5 {
+  border-right: 1px solid black;
+}
+
+.row2 {
+  border-bottom: 1px solid black;
+}
+
+.row5 {
+  border-bottom: 1px solid black;
+}
+
+.incorrect {
+  color: red;
+}
