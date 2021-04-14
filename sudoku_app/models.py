@@ -9,9 +9,9 @@ class SudokuGame(models.Model):
         ('medium', 'medium'),
         ('hard', 'hard')
     ]
-    initial_board = models.CharField(max_length=200)
-    current_board = models.CharField(max_length=200)
-    solution_board = models.CharField(max_length=200)
+    initial_board = models.CharField(max_length=500)
+    current_board = models.CharField(max_length=500)
+    solution_board = models.CharField(max_length=500)
     difficulty = models.CharField(max_length=10, choices=DIFFICULTIES)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
