@@ -1,3 +1,9 @@
+{% if error %}
+  <div>
+      Error: Username has been taken
+  </div>
+{% endif %}
+
 <form action="{% url 'create_user' %}" method="post">
     {% csrf_token %}
     <label for="email">Email</label><br>

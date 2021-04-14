@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .helper import generateSudoku, getLockedPositions, getErrors, fillCurrentBoard, addHint, getPuzzleStats, getLeaderboard
+from .helper import generateSudoku, getLockedPositions, getErrors, fillCurrentBoard, addHint, getPuzzleStats, getLeaderboard, tryCreateUser
 from sudoku_app.models import SudokuGame, SudokuRecord
 import json
 
@@ -126,19 +126,21 @@ def create_user(request):
         return render(request, 'sudoku_app/createuser.html', {})
     else:
         # create user using data sent from form and redirect to login page
-        email, username, password = request.POST['email'], request.POST['username'], request.POST['password']
-        User.objects.create_user(username, email, password)
-        return HttpResponseRedirect('/accounts/login')
+        success = tryCreateUser(request.POST)
+        if success:
+            return HttpResponseRedirect('/accounts/login')
+        else:
+            return render(request, 'sudoku_app/createuser.html', {'error': 'Username already exists'})
 
 # display number of puzzles that current user has solved
 @login_required
 def display_stats(request):
-    return render(request, 'sudoku_app/statistics.html', getPuzzleStats(request))
+    return render(request, 'sudoku_app/statistics.html', getPuzzleStats(request.user))
 
 # display how many puzzles each registered user has solved
 @login_required
 def display_leaderboard(request):
-    return render(request, 'sudoku_app/leaderboard.html', {"scores": getLeaderboard(request)})
+    return render(request, 'sudoku_app/leaderboard.html', {"scores": getLeaderboard()})
 
 
 

@@ -5,7 +5,7 @@
     {% endfor %}
   </ul>
 {% else %}
-  <p>No puzzles are available.</p>
+  <p>No puzzles are in progress.</p>
 {% endif %}
 <form method="GET" action="/puzzles/create"> 
   {% csrf_token %}

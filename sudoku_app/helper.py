@@ -67,17 +67,17 @@ def addHint(current_board_array, solution_board_array):
                 return current_board_array
 
 # query that retrieves number of puzzles solved for each difficulty from db
-def getPuzzleStats(request):
+def getPuzzleStats(user):
     with connection.cursor() as c:
         sudoku_record_table_name = SudokuRecord.objects.model._meta.db_table
         user_table_name = User.objects.model._meta.db_table
-        query = f"SELECT difficulty, COUNT(difficulty) as total FROM {sudoku_record_table_name} INNER JOIN {user_table_name} ON {sudoku_record_table_name}.user_id = {user_table_name}.id WHERE username='{request.user.username}' GROUP BY difficulty"
+        query = f"SELECT difficulty, COUNT(difficulty) as total FROM {sudoku_record_table_name} INNER JOIN {user_table_name} ON {sudoku_record_table_name}.user_id = {user_table_name}.id WHERE username='{user.username}' GROUP BY difficulty"
         c.execute(query)
         results = dict(c.fetchall())
         return results
 
 # query that retrieves number of puzzles each person has solved from db
-def getLeaderboard(request):
+def getLeaderboard():
     with connection.cursor() as c:
         sudoku_record_table_name = SudokuRecord.objects.model._meta.db_table
         user_table_name = User.objects.model._meta.db_table
@@ -85,6 +85,16 @@ def getLeaderboard(request):
         c.execute(query)
         results = dict(c.fetchall())
         return results
+
+def tryCreateUser(post_request_data):
+    email, username, password = post_request_data['email'], post_request_data['username'], post_request_data['password']
+    if User.objects.filter(username=username).exists():
+        return False
+    else:
+        User.objects.create_user(username, email, password)
+        return True
+
+
 
 
 
