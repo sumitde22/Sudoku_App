@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .helper import generateSudoku, getLockedPositions, getErrors, fillCurrentBoard, addHint, getPuzzleStats, getLeaderboard, tryCreateUser
+from sudoku_app.helper import generateSudoku, getLockedPositions, getErrors, fillCurrentBoard, addHint, getPuzzleStats, getLeaderboard, tryCreateUser
 from sudoku_app.models import SudokuGame, SudokuRecord
+from sudoku_app.forms import UserForm
 import json
+
 
 # Create your views here.
 
@@ -123,14 +125,22 @@ def reset_puzzle(request, puzzle_id):
 def create_user(request):
     # GET request indicates page needs to be displayed, POST indicates that user is being created
     if request.method == 'GET':
-        return render(request, 'sudoku_app/createuser.html', {})
+        # display form to create user
+        form = UserForm()
+        return render(request, 'sudoku_app/createuser.html', {'form': form})
     else:
-        # create user using data sent from form and redirect to login page
-        success = tryCreateUser(request.POST)
+        # cleanse inputs received from form
+        form = UserForm(request.POST)
+        if not form.is_valid():
+            newForm = UserForm()
+            return render(request, 'sudoku_app/createuser.html', {'error': 'Invalid input, try again', 'form': newForm})
+        # creating user will fail if username already exists
+        success = tryCreateUser(form.cleaned_data)
         if success:
             return HttpResponseRedirect('/accounts/login')
         else:
-            return render(request, 'sudoku_app/createuser.html', {'error': 'Username already exists'})
+            newForm = UserForm()
+            return render(request, 'sudoku_app/createuser.html', {'error': 'Username already exists', 'form': newForm})
 
 # display number of puzzles that current user has solved
 @login_required
